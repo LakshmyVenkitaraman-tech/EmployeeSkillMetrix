@@ -2,13 +2,11 @@ import axios from "axios";
 
 const API_BASE = "https://insights-api.terrificminds.com";
 
-// Add request interceptor for debugging
 axios.interceptors.request.use(request => {
   console.log('API Request:', request.method && request.method.toUpperCase(), request.url);
   return request;
 });
 
-// Add response interceptor for debugging
 axios.interceptors.response.use(
   response => {
     console.log('API Response:', response.status, response.config.url, response.data);
@@ -78,17 +76,14 @@ export const api = {
 
   async getAvailableSkills() {
     try {
-      // Try the v1 endpoint first
       const res = await axios.get(`${API_BASE}/v1/skills`);
       return res.data && res.data.data ? res.data.data : res.data;
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        // Fallback to the original endpoint
         try {
           const res = await axios.get(`${API_BASE}/skills`);
           return res.data && res.data.data ? res.data.data : res.data;
         } catch (fallbackError) {
-          // If both fail, throw the original error
           throw error;
         }
       }
@@ -117,8 +112,8 @@ export const getResolvedUserId = () => {
 };
 
 export const calculateSkillLevel = (rating) => {
-  if (rating >= 8) return { label: "ADVANCED", color: "bg-green-100 text-green-800" };
-  if (rating >= 6) return { label: "INTERMEDIATE", color: "bg-purple-100 text-purple-800" };
+  if (rating >= 7) return { label: "ADVANCED", color: "bg-green-100 text-green-800" };
+  if (rating >= 4) return { label: "INTERMEDIATE", color: "bg-purple-100 text-purple-800" };
   return { label: "BEGINNER", color: "bg-blue-100 text-blue-800" };
 };
 
