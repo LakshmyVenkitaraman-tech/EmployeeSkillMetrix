@@ -7,7 +7,12 @@ localStorage.setItem('user_id', USER_ID);
 export default function SkillForm({ onSaved }) {
   const [loading, setLoading] = useState(false);
   const [availableSkills, setAvailableSkills] = useState([]);
-  const [formData, setFormData] = useState({ skill_id: "", rating: " ",experienceYears: " ",experienceMonths: " "});
+  const [formData, setFormData] = useState({ 
+    skill_id: "", 
+    rating: "", 
+    experienceYears: "", 
+    experienceMonths: "" 
+  });
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -51,7 +56,7 @@ export default function SkillForm({ onSaved }) {
     setError("");
 
     try {
-   
+    
       if (!formData.skill_id || isNaN(Number(formData.skill_id)))
         throw new Error("Please select a valid skill");
       if (!formData.rating || isNaN(Number(formData.rating)) || Number(formData.rating) < 1 || Number(formData.rating) > 10)
@@ -64,8 +69,13 @@ export default function SkillForm({ onSaved }) {
         throw new Error("Experience cannot be negative");
       if (months > 11)
         throw new Error("Months should be between 0-11");
+
       const totalYears = years + Math.floor(months / 12);
-      const skillData = {skill_id: Number(formData.skill_id),proficiency: Number(formData.rating),years_experience: totalYears};
+      const skillData = {
+        skill_id: Number(formData.skill_id),
+        proficiency: Number(formData.rating),
+        years_experience: totalYears
+      };
 
       console.log("Sending payload:", skillData);
 
@@ -88,20 +98,40 @@ export default function SkillForm({ onSaved }) {
     }
   };
 
+  const isValidRating = () => {
+    const rating = Number(formData.rating);
+    return !isNaN(rating) && rating >= 1 && rating <= 10 && formData.rating.trim() !== "";
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-4">
       {error && (
-        <div className="text-red-600 bg-red-50 p-3 rounded"> {error}</div>)}
+        <div className="text-red-600 bg-red-50 p-3 rounded border border-red-200">
+          {error}
+        </div>
+      )}
+
       <div>
-        <label htmlFor="skill_id" className="block text-sm font-medium text-gray-700 mb-1"> Skill * </label>
-<select id="skill_id" name="skill_id" value={formData.skill_id} onChange={handleChange} required className="w-full p-2 border border-gray-300 rounded-md ">
-        
- <option value="">Select a skill</option>
- {availableSkills.map(skill => {
+        <label htmlFor="skill_id" className="block text-sm font-medium text-gray-700 mb-1">
+          Skill *
+        </label>
+        <select 
+          id="skill_id" 
+          name="skill_id" 
+          value={formData.skill_id} 
+          onChange={handleChange} 
+          required
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="">Select a skill</option>
+          {availableSkills.map(skill => {
             const skillId = skill.id || skill.skill_id;
             const skillName = skill.name || skill.skill_name;
             return (
-              <option key={skillId} value={skillId}> {skillName} </option>);
+              <option key={skillId} value={skillId}>
+                {skillName}
+              </option>
+            );
           })}
         </select>
         {availableSkills.length === 0 && !error && (
@@ -109,22 +139,59 @@ export default function SkillForm({ onSaved }) {
         )}
       </div>
 
-<div>
- <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-1">Rating (1-10) *</label>
-<input type="number" id="rating" name="rating" min="1" max="10" value={formData.rating} onChange={handleChange} required
-          className="w-full p-2 border border-gray-300 rounded-md "/>
-      </div>
-<div>
-<label htmlFor="experienceYears" className="block text-sm font-medium text-gray-700 mb-1">Experience (Years) </label>
-<input type="number" id="experience" min="0" value={formData.experienceYears} onChange={handleChange}
-          className="w-full p-2 border border-gray-300 rounded-md " />
-      </div>
-<div>
-<label htmlFor="experienceMonths" className="block text-sm font-medium text-gray-700 mb-1"> Experience (Months 0-11) </label>
-<input type="number" id="experienceMonths" name="experienceMonths" min="0" max="11" value={formData.experienceMonths} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md " />
+
+      <div>
+        <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-1">
+          Rating (1-10) *
+        </label>
+        <input
+          type="number"
+          id="rating"
+          name="rating"
+          min="1"
+          max="10"
+          value={formData.rating}
+          onChange={handleChange}
+          placeholder="Enter rating"
+          required
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
       </div>
 
-{formData.rating && (
+      <div>
+        <label htmlFor="experienceYears" className="block text-sm font-medium text-gray-700 mb-1">
+          Experience (Years)
+        </label>
+        <input
+          type="number"
+          id="experienceYears"
+          name="experienceYears"  
+          min="0"
+          value={formData.experienceYears}
+          onChange={handleChange}
+          placeholder="Enter years of experience"
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="experienceMonths" className="block text-sm font-medium text-gray-700 mb-1">
+          Additional Experience (Months 0-11)
+        </label>
+        <input
+          type="number"
+          id="experienceMonths"
+          name="experienceMonths"
+          min="0"
+          max="11"
+          value={formData.experienceMonths}
+          onChange={handleChange}
+          placeholder="Enter additional months"
+          className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+      {isValidRating() && (
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Skill Level
@@ -137,6 +204,7 @@ export default function SkillForm({ onSaved }) {
         </div>
       )}
 
+    
       <button 
         type="submit" 
         disabled={loading || availableSkills.length === 0}
