@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { api, calculateSkillLevel } from '../api/userApi';
+import { getResolvedUserId } from '../utils/envConfig';
 import { IoSearch } from "react-icons/io5";
 import { CiFilter } from "react-icons/ci";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-
-const USER_ID = 60041175820;
-localStorage.setItem('user_id', USER_ID);
 
 export default function SkillsTable({ refreshTrigger, showTopRatedOnly = false }) {
   const [loading, setLoading] = useState(true);
@@ -15,12 +13,13 @@ export default function SkillsTable({ refreshTrigger, showTopRatedOnly = false }
   const [filteredSkills, setFilteredSkills] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [selectedSkillToEdit, setSelectedSkillToEdit] = useState(null);
+  const userId = getResolvedUserId();
 
   const refresh = async () => {
     setLoading(true);
     setError('');
     try {
-      const data = await api.getUserSkills(USER_ID);
+      const data = await api.getUserSkills(userId);
       const skillsArray = Array.isArray(data) ? data : [];
       setSkills(skillsArray);
       if (showTopRatedOnly) {
@@ -47,7 +46,7 @@ export default function SkillsTable({ refreshTrigger, showTopRatedOnly = false }
 
   useEffect(function() { 
     refresh(); 
-  }, []);
+  }, [userId]); 
   
   useEffect(function() { 
     if (refreshTrigger) refresh(); 
@@ -56,7 +55,7 @@ export default function SkillsTable({ refreshTrigger, showTopRatedOnly = false }
   const onDelete = async (skillId) => {
     if (!window.confirm('Are you sure you want to delete this skill?')) return;
     try {
-      await api.deleteUserSkill(USER_ID, skillId);
+      await api.deleteUserSkill(userId, skillId);
       refresh();
     } catch (e) {
       let alertMessage = 'Failed to delete skill: Unknown error';
@@ -120,18 +119,8 @@ export default function SkillsTable({ refreshTrigger, showTopRatedOnly = false }
                     </td>
                     {!showTopRatedOnly && (
                       <td className="py-2 px-4 text-center flex justify-center gap-2">
-                        <button 
-                          onClick={() => onEdit(skill)} 
-                          className="bg-blue-500 text-white p-2 rounded"
-                        >
-                          <MdModeEdit />
-                        </button>
-                        <button 
-                          onClick={() => onDelete(skillId)} 
-                          className="bg-red-500 text-white p-2 rounded"
-                        >
-                          <MdDelete />
-                        </button>
+      <button onClick={() => onEdit(skill)} className="bg-blue-500 text-white p-2 rounded"> <MdModeEdit /> </button>
+<button onClick={() => onDelete(skillId)} className="bg-red-500 text-white p-2 rounded"><MdDelete /> </button>
                       </td>
                     )}
                   </tr>
@@ -143,8 +132,7 @@ export default function SkillsTable({ refreshTrigger, showTopRatedOnly = false }
       )}
 
       {showAddForm && (
-        <AddSkillModal  
-          selectedSkill={selectedSkillToEdit} 
+  <AddSkillModal  selectedSkill={selectedSkillToEdit} 
           onClose={() => {
             setShowAddForm(false); 
             setSelectedSkillToEdit(null);
