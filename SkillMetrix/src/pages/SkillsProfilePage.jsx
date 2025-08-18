@@ -1,56 +1,48 @@
 import SkillsTable from '../Components/SkillsTable'
 import SkillForm from '../Components/SkillForm'
+import Modal from '../Components/Modal'
 import { useState } from 'react'
 
 export default function SkillsProfilePage() {
-  const [showForm, setShowForm] = useState(false)
+  const [showAddForm, setShowAddForm] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
 
-  const handleRefresh = () => {
-    setRefreshKey(prev => prev + 1)
+  const handleRefresh = () => setRefreshKey(prev => prev + 1)
+
+  const handleAddSkill = () => setShowAddForm(true)
+  const handleAddClose = () => setShowAddForm(false)
+  const handleAddSaved = () => {
+    setShowAddForm(false)
+    handleRefresh()
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-gray-900">My Skills</h1>
-        <button 
-          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition-colors" 
-          onClick={() => setShowForm(true)}
-        >
-          + Add Skill
-        </button>
-      </div>
-
-      <div key={refreshKey}>
-        <SkillsTable 
-          refreshTrigger={refreshKey}
-          showTopRatedOnly={false}
-          enableSearch={true}
-        />
-      </div>
-
-      {showForm && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg mx-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Add Skill</h2>
-              <button 
-                onClick={() => setShowForm(false)} 
-                className="text-gray-500 hover:text-gray-700 text-xl font-bold w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100"
-              >
-                ×
-              </button>
-            </div>
-            <SkillForm 
-              onSaved={() => { 
-                setShowForm(false); 
-                handleRefresh();
-              }} 
-            />
-          </div>
+    <>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-semibold text-gray-900">My Skills</h1>
+          <button
+            className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition-colors"
+            onClick={handleAddSkill}
+          >
+            + Add Skill
+          </button>
         </div>
+
+        <div key={refreshKey}>
+          <SkillsTable 
+            refreshTrigger={refreshKey} 
+            showTopRatedOnly={false} 
+            enableSearch={true} 
+          />
+        </div>
+      </div>
+
+      {showAddForm && (
+        <Modal isOpen={showAddForm} onClose={handleAddClose} title="Add New Skill">
+          <SkillForm onSaved={handleAddSaved} onCancel={handleAddClose} />
+        </Modal>
       )}
-    </div>
+    </>
   )
 }
