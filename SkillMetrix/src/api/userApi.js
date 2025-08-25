@@ -20,27 +20,27 @@ axios.interceptors.response.use(
 
 export const api = {
   async getUserProfile(userId) {
-    const res = await axios.get(`${API_BASE}/user/${userId}/profile`);
+    const res = await axios.get(`${API_BASE}/v1/user/${userId}/profile`);
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
   async getUserEmploymentHistory(userId) {
-    const res = await axios.get(`${API_BASE}/user/${userId}/employment-history`);
+    const res = await axios.get(`${API_BASE}/v1/user/${userId}/employment-history`);
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
   async addEmploymentHistory(userId, historyData) {
-    const res = await axios.post(`${API_BASE}/user/${userId}/employment-history`, historyData);
+    const res = await axios.post(`${API_BASE}/v1/user/${userId}/employment-history`, historyData);
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
   async updateEmploymentHistory(userId, historyId, historyData) {
-    const res = await axios.put(`${API_BASE}/user/${userId}/employment-history/${historyId}`, historyData);
+    const res = await axios.put(`${API_BASE}/v1/user/${userId}/employment-history/${historyId}`, historyData);
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
   async deleteEmploymentHistory(userId, historyId) {
-    const res = await axios.delete(`${API_BASE}/user/${userId}/employment-history/${historyId}`);
+    const res = await axios.delete(`${API_BASE}/v1/user/${userId}/employment-history/${historyId}`);
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
@@ -70,7 +70,7 @@ export const api = {
   },
 
   async getEmploymentTypes() {
-    const res = await axios.get(`${API_BASE}/employment-types`);
+    const res = await axios.get(`${API_BASE}/v1/employment-types`);
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
