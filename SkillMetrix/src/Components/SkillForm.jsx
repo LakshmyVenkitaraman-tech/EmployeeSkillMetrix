@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api, calculateSkillLevel, getResolvedUserId } from '../api/userApi';
+import { api, calculateSkillLevel, getResolvedUserId } from '../API/userApi';
 
 function ErrorBoundary({ children, fallback }) {
   const [hasError, setHasError] = useState(false);

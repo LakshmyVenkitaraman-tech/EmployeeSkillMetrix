@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { api } from "../api/userApi";
-import { getResolvedUserId } from "../utils/envConfig";
+import { api } from "../API/userApi";
+import { getResolvedUserId } from "../Utils/envConfig";
 import { FiTrendingUp, FiStar, FiBriefcase } from "react-icons/fi";
 import DashboardCard from "../DashboardCard/Dashboardcard";
 import SkillsTable from "../Components/SkillsTable"; 

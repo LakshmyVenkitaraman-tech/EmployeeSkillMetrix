@@ -1,6 +1,6 @@
-import { getResolvedUserId } from '../utils/envConfig'
+import { getResolvedUserId } from '../Utils/envConfig'
 import ReusableTable from '../Components/ReusableTable'
-import { api, calculateSkillLevel } from '../api/userApi'
+import { api, calculateSkillLevel } from '../API/userApi'
 import SkillForm from '../Components/SkillForm'
 import { useState } from 'react'
 
