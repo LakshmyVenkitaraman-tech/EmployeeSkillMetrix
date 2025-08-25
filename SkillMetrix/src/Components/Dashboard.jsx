@@ -21,22 +21,19 @@ export default function Dashboard() {
       setLoading(true);
       setError("");
       try {
-        const profile = await api.getUserProfile(userId);
-
-        let skillsList = [];
+      const profile = await api.getUserProfile(userId);
+       let skillsList = [];
         try {
           skillsList = await api.getUserSkills(userId);
         } catch (e) {
           console.warn("Skills API failed:", e);
         }
-
         let employmentList = [];
         try {
           employmentList = await api.getUserEmploymentHistory(userId);
         } catch (e) {
           console.warn("Employment API unavailable, skipping", e);
         }
-
         if (!cancelled) {
           setUser(profile);
           setSkills(Array.isArray(skillsList) ? skillsList : []);
@@ -78,8 +75,7 @@ export default function Dashboard() {
   }, [skills]);
 
   const handleRefresh = () => {
-    setRefreshKey(prev => prev + 1);
-  };
+    setRefreshKey(prev => prev + 1);};
 
   if (loading) return <div className="p-4">Loading...</div>;
   if (error) return <div className="text-red-600 p-4">{error}</div>;
@@ -87,37 +83,17 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <DashboardCard 
-          title="Total Skills" 
-          value={totalSkills}
-          gradientClass="bg-gradient-to-br from-orange-500 to-orange-600"
-          icon={<FiTrendingUp className="h-6 w-6" />}
-        />
-        <DashboardCard 
-          title="Average Rating" 
-          value={avgRating} 
-          gradientClass="bg-gradient-to-br from-purple-500 to-purple-600" 
-          icon={<FiStar className="h-6 w-6" />} 
-        />
-        <DashboardCard 
-          title="Experience" 
-          value={`${totalExperience} years`} 
-          gradientClass="bg-gradient-to-br from-teal-500 to-teal-600" 
-          icon={<FiBriefcase className="h-6 w-6" />} 
-        />
+<DashboardCard title="Total Skills" value={totalSkills} gradientClass="bg-gradient-to-br from-orange-500 to-orange-600"icon={<FiTrendingUp className="h-6 w-6" />} />
+<DashboardCard title="Average Rating" value={avgRating} gradientClass="bg-gradient-to-br from-purple-500 to-purple-600"  icon={<FiStar className="h-6 w-6" />} />
+<DashboardCard title="Experience" value={`${totalExperience} years`} gradientClass="bg-gradient-to-br from-teal-500 to-teal-600" icon={<FiBriefcase className="h-6 w-6" />} />
       </div>
       <div className="bg-white rounded-xl shadow p-6 border border-gray-100">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold text-gray-900">Top Rated Skills</h2>
         </div>
-        <SkillsTable  
-          refreshTrigger={refreshKey} 
-          showTopRatedOnly={true} 
-          enableSearch={false} 
-        />
+<SkillsTable  refreshTrigger={refreshKey} showTopRatedOnly={true} enableSearch={false} />
         {skills.length === 0 && (
-          <div className="text-gray-500 text-center py-4">
-            No skills added yet. 
+          <div className="text-gray-500 text-center py-4">No skills added yet.         
           </div>
         )}
       </div>
