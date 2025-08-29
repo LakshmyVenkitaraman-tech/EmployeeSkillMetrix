@@ -64,7 +64,7 @@ export default function ExperienceForm({ selectedExperience, onSaved, onCancel }
     if (selectedExperience) {
       console.log('Selected Experience:', selectedExperience);
       const [city, country] = selectedExperience.location ? selectedExperience.location.split(', ').map(item => item.trim()) : ['', ''];
-      // The useEffect dependency on 'countries' ensures this runs after countries are loaded
+      
       const defaultCountry = countries.find(c => c.label === country);
 
       setFormData({
@@ -201,9 +201,9 @@ export default function ExperienceForm({ selectedExperience, onSaved, onCancel }
         </div>
       )}
       
-      {/* Scrollable Container for Skills */}
+    
       <div className="overflow-y-auto max-h-[50vh] space-y-8 pr-4">
-        {/* Basic Details Section */}
+       
         <div>
           <h2 className="text-xl font-medium text-gray-900 mb-6">Basic Details</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -294,7 +294,7 @@ export default function ExperienceForm({ selectedExperience, onSaved, onCancel }
           </div>
         </div>
         
-        {/* Skills Learnt Section */}
+     
         <div>
           <h2 className="text-xl font-medium text-gray-900 mb-6">Skills Learnt</h2>
           <div className="space-y-4">
@@ -349,7 +349,7 @@ export default function ExperienceForm({ selectedExperience, onSaved, onCancel }
         </div>
       </div>
       
-      {/* Action Buttons */}
+      
       <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
         <button type="button" onClick={onCancel} className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg">
           Cancel</button>
