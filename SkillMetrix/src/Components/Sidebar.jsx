@@ -14,7 +14,7 @@ export default function Sidebar() {
     <aside className="w-64 min-h-screen bg-white text-black flex flex-col">
       <div className="flex items-center px-6 py-5 border-b border-gray-200">
         <div className="flex items-center mr-3">
-          <img className="w-8 h-8 object-cover" src="./src/assets/download.png" alt="Logo"/>
+          <img className="w-8 h-8 object-cover" src="./src/Assets/download.png" alt="Logo"/>
         </div>
         <h2 className="text-lg font-bold text-gray-900">Skill Matrix</h2>
       </div>

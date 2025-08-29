@@ -1,9 +1,9 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import MainLayout from './Layout/MainLayout'
-import DashboardPage from "./pages/DashboardPage";
-import SkillsProfilePage from './pages/SkillsProfilePage'
-import MyExperiencePage from './pages/MyExperiencePage'
+import DashboardPage from "./Pages/DashboardPage";
+import SkillsProfilePage from './Pages/SkillsProfilePage'
+import MyExperiencePage from './Pages/MyExperiencePage'
 
 function App() {
   return (

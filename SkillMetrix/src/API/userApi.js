@@ -51,16 +51,21 @@ export const api = {
 
   async addUserSkill(userId, skillData) {
     const payload = {
-      skill_id: skillData.skill_id,
-      proficiency: skillData.proficiency ? skillData.proficiency : skillData.rating,
-      years_experience: skillData.years_experience ? skillData.years_experience : Math.floor((skillData.months ? skillData.months : (skillData.experience_in_months ? skillData.experience_in_months : 0)) / 12)
+      skill_id: Number(skillData.skill_id),
+      proficiency: Number(skillData.proficiency),
+      months_experience: Number(skillData.months_experience),
     };
     const res = await axios.post(`${API_BASE}/v1/user/${userId}/skills`, payload);
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
   async updateUserSkill(userId, skillId, skillData) {
-    const res = await axios.put(`${API_BASE}/v1/user/${userId}/skills/${skillId}`, skillData);
+    const payload = {
+      skill_id: Number(skillData.skill_id),
+      proficiency: Number(skillData.proficiency),
+      months_experience: Number(skillData.months_experience),
+    };
+    const res = await axios.put(`${API_BASE}/v1/user/${userId}/skills/${skillId}`, payload);
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
@@ -74,28 +79,46 @@ export const api = {
     return res.data && res.data.data ? res.data.data : res.data;
   },
 
-  async getAvailableSkills() {
-    try {
-      const res = await axios.get(`${API_BASE}/v1/skills`);
-      return res.data && res.data.data ? res.data.data : res.data;
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        try {
-          const res = await axios.get(`${API_BASE}/skills`);
-          return res.data && res.data.data ? res.data.data : res.data;
-        } catch (fallbackError) {
-          throw error;
+  async getAvailableSkills(query = '') {
+    let allSkills = [];
+    let page = 1;
+    let hasMore = true;
+    const limit = 50;
+
+    while (hasMore) {
+      try {
+        const res = await axios.get(`${API_BASE}/v1/skills?page=${page}&limit=${limit}&q=${query}`);
+        const data = res.data?.data;
+        const total = res.data?.pagination?.total;
+
+        if (Array.isArray(data) && data.length > 0) {
+          allSkills = allSkills.concat(data);
+          if (allSkills.length >= total) {
+            hasMore = false;
+          } else {
+            page++;
+          }
+        } else {
+          hasMore = false;
         }
+      } catch (error) {
+        console.error("Failed to fetch skills:", error);
+        hasMore = false;
+        throw error;
       }
-      throw error;
     }
+    return allSkills;
+  },
+
+  async getCountries() {
+    const res = await axios.get(`${API_BASE}/v1/countries`);
+    return res.data && res.data.data ? res.data.data : res.data;
   }
 };
 
 export const getResolvedUserId = () => {
   try {
-    const url = new URL(window.location.href);
-    const fromQuery = url.searchParams.get("userId");
+    const fromQuery = new URLSearchParams(window.location.search).get("userId");
     if (fromQuery) {
       localStorage.setItem("user_id", fromQuery);
       return fromQuery;
@@ -118,9 +141,19 @@ export const calculateSkillLevel = (rating) => {
 };
 
 export const calculateYearsOfExperience = (months) => {
-  if (months < 12) return `${months} months`;
+  if (months === null || months === undefined || months < 0) {
+    return "0 months"; 
+  }
+  if (months < 12) {
+    return `${months} ${months === 1 ? 'month' : 'months'}`;
+  }
+
   const years = Math.floor(months / 12);
   const remainingMonths = months % 12;
-  if (remainingMonths === 0) return `${years} years`;
-  return `${years} years ${remainingMonths} months`;
+
+  if (remainingMonths === 0) {
+    return `${years} ${years === 1 ? 'year' : 'years'}`;
+  }
+
+  return `${years} ${years === 1 ? 'year' : 'years'} ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`;
 };

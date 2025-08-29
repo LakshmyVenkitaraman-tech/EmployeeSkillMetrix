@@ -35,7 +35,7 @@ export default function Dashboard() {
           console.warn("Employment API unavailable, skipping", e);
         }
         if (!cancelled) {
-          setUser(profile);
+         // setUser(profile);
           setSkills(Array.isArray(skillsList) ? skillsList : []);
           setEmployment(Array.isArray(employmentList) ? employmentList : []);
         }
@@ -69,7 +69,7 @@ export default function Dashboard() {
 
     return {
       totalSkills: total,
-      avgRating: total > 0 ? (ratingSum / total).toFixed(1) : 0,
+      avgRating: total > 0 ? (ratingSum / total).toFixed(2) : 0,
       totalExperience: experienceSum
     };
   }, [skills]);
